@@ -4,7 +4,7 @@ using Microsoft.Azure.Storage.Blob;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
+using Repeatly.API.Domain;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -22,17 +22,8 @@ namespace Repeatly.API
             [Blob(FUNCTION_NAME, FileAccess.ReadWrite)] CloudBlobContainer userContainer,
             ILogger logger)
         {
-            var principal = await StaticWebAppsAuth.GetClientPrincipalAsync(request);            
-            var blob = userContainer.GetBlockBlobReference(principal.UserId);
-            var blobExists = await blob.ExistsAsync();
-            if (!blobExists)            
-            {
-                var json = JsonConvert.SerializeObject(principal);
-                await blob.UploadTextAsync(json);
-                
-                blob.Properties.ContentType = "application/json";
-                await blob.SetPropertiesAsync();
-            }
+            var principal = await StaticWebAppsAuth.GetClientPrincipalAsync(request);
+            var blob = await User.GetBlobAsync(principal, userContainer);
                         
             return new FileStreamResult(await blob.OpenReadAsync(), blob.Properties.ContentType);
         }

@@ -1,13 +1,15 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
+using Repeatly.API.Domain;
 using System;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Task = System.Threading.Tasks.Task;
 
 namespace Repeatly.API
 {
-    public static partial class StaticWebAppsAuth
+    public static class StaticWebAppsAuth
     {
         public static async Task<ClientPrincipal> GetClientPrincipalAsync(HttpRequest request)
         {
