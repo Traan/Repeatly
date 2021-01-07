@@ -1,0 +1,8 @@
+﻿{
+  "profiles": {
+    "Repeatly.API": {
+      "commandName": "Project",
+      "commandLineArgs": "start --csharp --cors *"
+    }
+  }
+}
